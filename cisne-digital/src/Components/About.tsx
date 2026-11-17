@@ -1,0 +1,6 @@
+import { ArrowUpRight, Coffee, Heart, Laptop } from 'lucide-react'
+import SectionHeading from './SectionHeading'
+
+export default function About() {
+  return <section className="section about" id="nosotros"><div className="container about__grid"><div className="about__scene"><div className="about__scene-glow"/><img src="/logo.png" alt="Logo de Cisne Digital con una taza y el arte del cisne sobre el café" loading="lazy"/><div className="about__scene-caption"><Heart size={15} fill="currentColor"/> UNA IDEA CREADA CON CARIÑO</div></div><div className="about__copy"><SectionHeading eyebrow="NUESTRA ESENCIA" title="Una historia bonita. Una idea con propósito." description="Nos gusta pensar que los mejores proyectos comienzan con una conversación. El nuestro nació de compartir ideas, creatividad y el entusiasmo de construir algo juntos." align="left"/><p>Somos un equipo que une diseño, desarrollo y atención cercana. Queremos ayudar a que negocios reales tengan una presencia digital tan especial como lo que ofrecen.</p><div className="about__mini"><span><Coffee size={19}/> Inspiración cotidiana</span><span><Laptop size={19}/> Tecnología útil</span></div><a href="#contacto" className="text-link">Trabajemos juntos <ArrowUpRight size={18}/></a></div></div></section>
+}
