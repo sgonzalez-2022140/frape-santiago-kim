@@ -49,8 +49,6 @@ export default function Contact({
   sendContact,
 } = useContact();
 
-  const API_URL =
-    import.meta.env.VITE_API_URL || "http://localhost:3001";
 
   const updateField = (
     field: keyof ContactForm,
