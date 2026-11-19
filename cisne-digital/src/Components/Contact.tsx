@@ -1,53 +1,284 @@
-import { useEffect, useState, type FormEvent } from 'react'
-import { ArrowRight, CheckCircle2, Mail, MapPin, MessageCircle, Send } from 'lucide-react'
-import SectionHeading from './SectionHeading'
-import { plans, serviceList } from '../data/siteData'
 
-type Props = { chosenPlan: string }
+import { useState, type FormEvent } from "react";
+import { useContact } from "../hook/useContact";
+import {
+  Mail,
+  UserRound,
+  Building2,
+  MessageSquare,
+  Send,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 
-const whatsapp = String(import.meta.env.VITE_WHATSAPP_NUMBER || '').replace(/\D/g, '')
-const contactEmail = String(import.meta.env.VITE_CONTACT_EMAIL || '').trim()
+import "../Components/styles/Contact.css";
 
-export default function Contact({ chosenPlan }: Props) {
-  const [name, setName] = useState('')
-  const [business, setBusiness] = useState('')
-  const [contact, setContact] = useState('')
-  const [interest, setInterest] = useState(chosenPlan || '')
-  const [details, setDetails] = useState('')
-  const [notice, setNotice] = useState('')
-  useEffect(() => { if (chosenPlan) setInterest(chosenPlan) }, [chosenPlan])
+type ContactProps = {
+  selectedPlan?: string;
+};
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const message = [
-      '¡Hola! Me interesa cotizar una página web con Cisne Digital.',
-      '',
-      `Mi nombre: ${name.trim()}`,
-      `Negocio: ${business.trim() || 'Por definir'}`,
-      `Contacto: ${contact.trim()}`,
-      `Servicio o plan: ${interest || 'Necesito orientación'}`,
-      `Mi idea: ${details.trim() || 'Me gustaría conocer las opciones disponibles.'}`,
-    ].join('\n')
+type ContactForm = {
+  nombre: string;
+  correo: string;
+  negocio: string;
+  servicio: string;
+  mensaje: string;
+};
 
-    if (whatsapp) {
-      window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer')
-      setNotice('Se abrió WhatsApp con tu solicitud. Revisa el mensaje y envíalo para completar el contacto.')
-      return
-    }
-    if (contactEmail) {
-      window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent('Cotización web · Cisne Digital')}&body=${encodeURIComponent(message)}`
-      setNotice('Se intentó abrir tu aplicación de correo con el mensaje preparado.')
-      return
-    }
-    try {
-      await navigator.clipboard.writeText(message)
-      setNotice('Solicitud copiada. Configura el WhatsApp o correo del negocio en .env para recibirla directamente.')
-    } catch {
-      setNotice(`Tu solicitud está lista:\n\n${message}`)
-    }
+const initialForm: ContactForm = {
+  nombre: "",
+  correo: "",
+  negocio: "",
+  servicio: "",
+  mensaje: "",
+};
+
+export default function Contact({
+  selectedPlan = "",
+}: ContactProps) {
+  const [form, setForm] = useState<ContactForm>({
+    ...initialForm,
+    servicio: selectedPlan,
+  });
+
+ const {
+  loading,
+  success,
+  error,
+  sendContact,
+} = useContact();
+
+  const API_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:3001";
+
+  const updateField = (
+    field: keyof ContactForm,
+    value: string
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  
+const handleSubmit = async (
+  e: FormEvent<HTMLFormElement>
+) => {
+  e.preventDefault();
+
+  const enviado = await sendContact(form);
+
+  if (enviado) {
+    setForm({
+      ...initialForm,
+      servicio: selectedPlan,
+    });
   }
+};
 
-  return <section className="section contact" id="contacto"><div className="container contact__grid"><div className="contact__left"><SectionHeading eyebrow="HAGAMOS EQUIPO" title="Cuéntanos qué tienes en mente" description="No necesitas hablar en términos técnicos. Cuéntanos sobre tu negocio y buscamos contigo la mejor solución." align="left" light/><div className="contact__highlights"><span><MessageCircle size={20}/> Conversación sin compromiso</span><span><CheckCircle2 size={20}/> Propuesta según tus necesidades</span><span><MapPin size={20}/> Desde Guatemala, para tu negocio</span></div><div className="contact__quote">“Las buenas ideas merecen verse increíbles en internet.”</div></div>
-    <form className="contact-form" onSubmit={submit}><div className="contact-form__top"><span><Mail size={18}/> Solicita una cotización</span><p>Completa estos datos y preparamos tu mensaje.</p></div><div className="contact-form__row"><label>Tu nombre *<input value={name} onChange={e=>setName(e.target.value)} required maxLength={80} placeholder="¿Cómo te llamas?"/></label><label>Nombre de tu negocio<input value={business} onChange={e=>setBusiness(e.target.value)} maxLength={100} placeholder="Tu emprendimiento"/></label></div><label>Correo o teléfono de contacto *<input value={contact} onChange={e=>setContact(e.target.value)} required maxLength={100} placeholder="Para poder comunicarnos contigo"/></label><label>¿Qué necesitas?<select value={interest} onChange={e=>setInterest(e.target.value)}><option value="">Necesito orientación</option>{serviceList.map(s=><option key={s.id} value={s.title}>{s.title}</option>)}{plans.map(p=><option key={p.title} value={p.title}>Plan {p.title}</option>)}</select></label><label>Cuéntanos un poco de tu idea<textarea value={details} onChange={e=>setDetails(e.target.value)} rows={4} maxLength={1200} placeholder="¿Qué hace tu negocio y qué te gustaría lograr con tu web?"/></label><button className="button button--primary" type="submit">{whatsapp ? 'Preparar mensaje de WhatsApp' : contactEmail ? 'Preparar correo' : 'Copiar mi solicitud'} <Send size={17}/></button><small>Este formulario no guarda tus datos en un servidor. {whatsapp ? 'Podrás revisar tu mensaje en WhatsApp antes de enviarlo.' : 'El envío directo se habilita al configurar los datos de contacto.'}</small>{notice && <div className="contact-form__notice" role="status" style={{whiteSpace:'pre-wrap'}}>{notice}<ArrowRight size={17}/></div>}</form>
-  </div></section>
+
+  return (
+    <section id="contacto" className="cisne-contact">
+      <div className="cisne-contact-container">
+
+        <div className="cisne-contact-info">
+          <span className="cisne-contact-eyebrow">
+            HABLEMOS DE TU PROYECTO
+          </span>
+
+          <h2>
+            Hagamos realidad
+            <span> tu próxima gran idea.</span>
+          </h2>
+
+          <p>
+            Cuéntanos sobre tu negocio y lo que necesitas.
+            Te ayudaremos a encontrar una solución digital
+            que se adapte a tus objetivos.
+          </p>
+
+          <div className="cisne-contact-benefits">
+            <div>
+              <CheckCircle2 size={19} />
+              <span>Atención personalizada</span>
+            </div>
+            <div>
+              <CheckCircle2 size={19} />
+              <span>Propuesta según tu proyecto</span>
+            </div>
+            <div>
+              <CheckCircle2 size={19} />
+              <span>Diseños modernos y responsivos</span>
+            </div>
+          </div>
+
+          <div className="cisne-contact-brand">
+            <img src="/logo.png" alt="Logo Cisne Digital" />
+            <div>
+              <strong>Cisne Digital</strong>
+              <span>Diseño web con propósito.</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="cisne-contact-card">
+          <div className="cisne-contact-card-header">
+            <h3>Solicita tu cotización</h3>
+            <p>Completa tus datos y nos pondremos en contacto.</p>
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className="cisne-form-row">
+              <div className="cisne-form-group">
+                <label htmlFor="cisne-nombre">
+                  <UserRound size={16} />
+                  Tu nombre
+                </label>
+
+                <input
+                  id="cisne-nombre"
+                  type="text"
+                  placeholder="Nombre completo"
+                  autoComplete="name"
+                  maxLength={100}
+                  required
+                  value={form.nombre}
+                  onChange={(e) =>
+                    updateField("nombre", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="cisne-form-group">
+                <label htmlFor="cisne-correo">
+                  <Mail size={16} />
+                  Correo electrónico
+                </label>
+
+                <input
+                  id="cisne-correo"
+                  type="email"
+                  placeholder="correo@ejemplo.com"
+                  autoComplete="email"
+                  maxLength={254}
+                  required
+                  value={form.correo}
+                  onChange={(e) =>
+                    updateField("correo", e.target.value)
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="cisne-form-group">
+              <label htmlFor="cisne-negocio">
+                <Building2 size={16} />
+                Nombre del negocio
+              </label>
+
+              <input
+                id="cisne-negocio"
+                type="text"
+                placeholder="Ej. Cafetería El Cisne"
+                maxLength={120}
+                required
+                value={form.negocio}
+                onChange={(e) =>
+                  updateField("negocio", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="cisne-form-group">
+              <label htmlFor="cisne-servicio">
+                ¿Qué tipo de página necesitas?
+              </label>
+
+              <select
+                id="cisne-servicio"
+                value={form.servicio}
+                onChange={(e) =>
+                  updateField("servicio", e.target.value)
+                }
+              >
+                <option value="">Selecciona un servicio</option>
+                <option value="Landing Page">Landing Page</option>
+                <option value="Página empresarial">
+                  Página empresarial
+                </option>
+                <option value="Catálogo digital">
+                  Catálogo digital
+                </option>
+                <option value="Tienda en línea">
+                  Tienda en línea
+                </option>
+                <option value="Sistema personalizado">
+                  Sistema personalizado
+                </option>
+                <option value="Otro">Otro proyecto</option>
+              </select>
+            </div>
+
+            <div className="cisne-form-group">
+              <label htmlFor="cisne-mensaje">
+                <MessageSquare size={16} />
+                Cuéntanos tu idea
+              </label>
+
+              <textarea
+                id="cisne-mensaje"
+                rows={5}
+                placeholder="Cuéntanos qué hace tu negocio y qué te gustaría tener en tu página web..."
+                maxLength={2800}
+                required
+                value={form.mensaje}
+                onChange={(e) =>
+                  updateField("mensaje", e.target.value)
+                }
+              />
+            </div>
+
+            {success && (
+              <div className="cisne-form-success" role="status">
+                <CheckCircle2 size={19} />
+                ¡Solicitud enviada! Nos pondremos en contacto contigo.
+              </div>
+            )}
+
+            {error && (
+              <div className="cisne-form-error" role="alert">
+                <AlertCircle size={19} />
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="cisne-contact-submit"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={19} className="cisne-spin" />
+                  Enviando solicitud...
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  Enviar cotización
+                </>
+              )}
+            </button>
+
+            <p className="cisne-contact-privacy">
+              Tus datos se utilizarán únicamente para
+              responder a tu solicitud.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
 }

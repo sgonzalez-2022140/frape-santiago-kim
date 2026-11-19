@@ -35,7 +35,7 @@ export default function App() {
         <Pricing onSelectPlan={handleSelectPlan} />
         <About />
         <FAQ />
-        <Contact chosenPlan={chosenPlan} />
+        <Contact selectedPlan={chosenPlan} />
       </main>
       <Footer />
       <FloatingContact />

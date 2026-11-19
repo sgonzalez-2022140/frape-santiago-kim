@@ -1,0 +1,270 @@
+
+.cisne-contact {
+  padding: 110px 24px;
+  background: linear-gradient(
+    135deg,
+    #fffaf4 0%,
+    #f6e8d9 55%,
+    #f1d8c2 100%
+  );
+  font-family: "Inter", sans-serif;
+}
+
+.cisne-contact-container {
+  max-width: 1180px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: center;
+  gap: 70px;
+}
+
+.cisne-contact-eyebrow {
+  color: #b76b49;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.cisne-contact-info h2 {
+  font-size: clamp(34px, 4vw, 55px);
+  line-height: 1.13;
+  color: #34231d;
+  margin: 20px 0;
+  letter-spacing: -1.5px;
+}
+
+.cisne-contact-info h2 span {
+  color: #b86b4b;
+}
+
+.cisne-contact-info > p {
+  color: #74665e;
+  line-height: 1.85;
+  font-size: 15px;
+}
+
+.cisne-contact-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  margin-top: 30px;
+}
+
+.cisne-contact-benefits div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #554036;
+  font-size: 14px;
+}
+
+.cisne-contact-benefits svg {
+  color: #b76b49;
+}
+
+.cisne-contact-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 45px;
+}
+
+.cisne-contact-brand img {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+}
+
+.cisne-contact-brand div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cisne-contact-brand strong {
+  font-size: 19px;
+  color: #34231d;
+}
+
+.cisne-contact-brand span {
+  font-size: 13px;
+  color: #8a7469;
+}
+
+.cisne-contact-card {
+  background: #fffdfa;
+  padding: 39px;
+  border: 1px solid #efdfd1;
+  border-radius: 22px;
+  box-shadow: 0 20px 60px rgba(93, 55, 35, 0.1);
+}
+
+.cisne-contact-card-header {
+  margin-bottom: 28px;
+}
+
+.cisne-contact-card-header h3 {
+  font-size: 25px;
+  color: #34231d;
+  margin: 0 0 9px;
+}
+
+.cisne-contact-card-header p {
+  color: #8a7b71;
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.cisne-contact-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cisne-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.cisne-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+
+.cisne-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #513b31;
+}
+
+.cisne-form-group label svg {
+  color: #b86b4b;
+}
+
+.cisne-form-group input,
+.cisne-form-group select,
+.cisne-form-group textarea {
+  width: 100%;
+  padding: 14px 15px;
+  background: #fffaf5;
+  border: 1px solid #e8d8c9;
+  border-radius: 10px;
+  outline: none;
+  color: #382921;
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cisne-form-group input:focus,
+.cisne-form-group select:focus,
+.cisne-form-group textarea:focus {
+  border-color: #b86b4b;
+  box-shadow: 0 0 0 3px rgba(184, 107, 75, 0.12);
+}
+
+.cisne-form-group textarea {
+  resize: vertical;
+  min-height: 115px;
+}
+
+.cisne-contact-submit {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  border: none;
+  border-radius: 11px;
+  background: linear-gradient(110deg, #c17853, #9c4b2e);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cisne-contact-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(156, 75, 46, 0.25);
+}
+
+.cisne-contact-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.cisne-form-success,
+.cisne-form-error {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.cisne-form-success {
+  color: #246345;
+  background: #edf8f0;
+}
+
+.cisne-form-error {
+  color: #a33d35;
+  background: #fff0ec;
+}
+
+.cisne-contact-privacy {
+  font-size: 11px;
+  text-align: center;
+  color: #95867b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cisne-spin {
+  animation: cisne-rotation 1s linear infinite;
+}
+
+@keyframes cisne-rotation {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 900px) {
+  .cisne-contact-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .cisne-contact {
+    padding: 70px 20px;
+  }
+}
+
+@media (max-width: 540px) {
+  .cisne-contact {
+    padding: 55px 16px;
+  }
+
+  .cisne-contact-card {
+    padding: 25px 19px;
+  }
+
+  .cisne-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cisne-contact-info h2 {
+    font-size: 35px;
+  }
+}
